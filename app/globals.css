@@ -1,0 +1,440 @@
+:root {
+  --bg: #f4f1f7;
+  --surface: #ffffff;
+  --ink: #1a0b2e;
+  --ink-soft: #6b5f7a;
+  --accent: #6f28f0;
+  --accent-2: #7c3cf1;
+  --accent-deep: #5720b9;
+  --accent-soft: #f0e8fe;
+
+  /* צבעי תפקידים — תואם לנוהל */
+  --role-pm: #6f28f0;
+  --role-product: #0f82ff;
+  --role-dev: #ffa020;
+  --role-qa: #37c457;
+
+  --line: #e7e0f0;
+  --ok: #1f9d6b;
+  --ok-soft: #e2f5ed;
+  --warn: #d98a1f;
+  --warn-soft: #fdf2dd;
+  --amber: #b97200;
+  --amber-soft: #fff2d6;
+  --todo: #8a8094;
+  --todo-soft: #f0ecf5;
+  --danger: #c2304a;
+  --radius: 18px;
+  --shadow: 0 2px 6px rgba(26, 11, 46, 0.06), 0 12px 32px rgba(26, 11, 46, 0.07);
+  --shadow-lg: 0 8px 40px rgba(87, 32, 185, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Heebo, Inter, system-ui, -apple-system, 'Segoe UI', Arial,
+    sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+h1,
+h2,
+h3 {
+  margin: 0 0 0.4em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.container {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 26px 22px 90px;
+}
+
+/* ── Topbar ───────────────────────────── */
+.topbar {
+  background: var(--ink);
+  color: #fff;
+  padding: 14px 0;
+}
+.topbar .container {
+  padding-top: 0;
+  padding-bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.topbar .brand {
+  font-size: 13.5px;
+  opacity: 0.7;
+}
+.topbar .title {
+  font-weight: 800;
+  font-size: 16px;
+}
+
+/* ── Hero גראדיינט ────────────────────── */
+.hero {
+  background: linear-gradient(140deg, var(--accent-2), var(--accent-deep));
+  color: #fff;
+  border-radius: var(--radius);
+  padding: 30px 32px;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 26px;
+}
+.hero .eyebrow {
+  font-size: 13.5px;
+  opacity: 0.85;
+  margin-bottom: 6px;
+}
+.hero h1 {
+  color: #fff;
+  font-size: 34px;
+  margin: 0 0 16px;
+}
+.hero .sub {
+  opacity: 0.9;
+  font-size: 15px;
+}
+.hero-tabs {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.hero-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.hero-tab.active {
+  background: #fff;
+  color: var(--accent-deep);
+}
+.hero-tab .num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+  font-size: 12.5px;
+  font-weight: 800;
+}
+.hero-tab.active .num {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+}
+
+/* ── Cards ────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+.card.accent {
+  border-inline-start: 5px solid var(--accent);
+}
+.card.accent-amber {
+  border-inline-start: 5px solid var(--warn);
+}
+
+/* ── Buttons ──────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 11px 20px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.1s, box-shadow 0.15s, opacity 0.15s;
+  box-shadow: 0 4px 14px rgba(111, 40, 240, 0.28);
+}
+.btn:hover {
+  transform: translateY(-1px);
+}
+.btn:disabled {
+  background: var(--todo-soft);
+  color: var(--todo);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+.btn.secondary {
+  background: var(--accent-soft);
+  color: var(--accent);
+  box-shadow: none;
+}
+.btn.ghost {
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  box-shadow: none;
+}
+
+/* ── Inputs ───────────────────────────── */
+.input,
+.textarea,
+.select {
+  width: 100%;
+  padding: 11px 13px;
+  border: 1.5px solid var(--line);
+  border-radius: 11px;
+  font-family: inherit;
+  font-size: 15px;
+  background: #fff;
+  color: var(--ink);
+  transition: border-color 0.15s;
+}
+.input:focus,
+.textarea:focus,
+.select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+.textarea {
+  min-height: 110px;
+  resize: vertical;
+}
+.field {
+  margin-bottom: 18px;
+}
+.field label {
+  display: block;
+  font-weight: 700;
+  margin-bottom: 7px;
+  font-size: 14px;
+}
+.field .hint {
+  color: var(--ink-soft);
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+/* ── Badges & role chips ──────────────── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 999px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+.badge.done {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+.badge.in_progress {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+.badge.todo {
+  background: var(--todo-soft);
+  color: var(--todo);
+}
+.badge.tozar {
+  background: var(--amber-soft);
+  color: var(--amber);
+}
+.badge.type {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* role chip עם נקודת צבע */
+.role-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 11px 4px 8px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 700;
+  background: #fff;
+  border: 1.5px solid var(--line);
+  color: var(--ink);
+}
+.role-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  color: #fff;
+  font-size: 10.5px;
+  font-weight: 800;
+}
+.role-pm {
+  background: var(--role-pm);
+}
+.role-product {
+  background: var(--role-product);
+}
+.role-dev {
+  background: var(--role-dev);
+}
+.role-qa {
+  background: var(--role-qa);
+}
+
+/* ── Stage header ─────────────────────── */
+.stage-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 6px;
+}
+.stage-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  font-size: 22px;
+  font-weight: 800;
+  flex: none;
+}
+.stage-num.current {
+  background: linear-gradient(140deg, var(--accent-2), var(--accent-deep));
+  color: #fff;
+  box-shadow: 0 6px 18px rgba(111, 40, 240, 0.3);
+}
+.stage-num.other {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.stage-num.locked {
+  background: var(--todo-soft);
+  color: var(--todo);
+}
+.stage-head h2 {
+  margin: 0;
+  font-size: 24px;
+}
+
+.group-title {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--accent-deep);
+  margin: 22px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.group-title::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border-radius: 3px;
+  background: var(--accent);
+}
+
+/* ── Misc ─────────────────────────────── */
+.muted {
+  color: var(--ink-soft);
+}
+.small {
+  font-size: 13px;
+}
+.purpose-box {
+  background: linear-gradient(140deg, #f6f0ff, #efe6fe);
+  border: 1px solid #e3d4fb;
+  border-inline-start: 5px solid var(--accent);
+  border-radius: 14px;
+  padding: 16px 18px;
+  margin-bottom: 22px;
+  font-size: 15px;
+  color: var(--ink);
+}
+.purpose-box .label {
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 5px;
+  font-size: 13.5px;
+}
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.grid {
+  display: grid;
+  gap: 14px;
+}
+.notice {
+  border-radius: 12px;
+  padding: 11px 15px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.notice.warn {
+  background: var(--warn-soft);
+  color: var(--warn);
+}
+.notice.ok {
+  background: var(--ok-soft);
+  color: var(--ok);
+}
+
+/* progress bar קטן */
+.progress {
+  height: 7px;
+  background: var(--todo-soft);
+  border-radius: 999px;
+  overflow: hidden;
+  min-width: 120px;
+  flex: 1;
+}
+.progress > span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent-deep));
+  border-radius: 999px;
+}
+
+table.tmpl {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 6px;
+}
+table.tmpl th {
+  text-align: right;
+  padding: 4px 8px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-weight: 700;
+}
+table.tmpl td {
+  padding: 3px 4px;
+}
