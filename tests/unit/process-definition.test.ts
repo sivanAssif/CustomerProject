@@ -10,15 +10,25 @@ import {
 } from '@/lib/process-definition';
 
 describe('process-definition structure', () => {
-  it('has exactly 3 stages numbered 1..3', () => {
-    expect(STAGES).toHaveLength(3);
-    expect(STAGES.map((s) => s.number)).toEqual([1, 2, 3]);
+  it('has exactly 4 stages numbered 1..4', () => {
+    expect(STAGES).toHaveLength(4);
+    expect(STAGES.map((s) => s.number)).toEqual([1, 2, 3, 4]);
   });
 
   it('only the last stage has no transition condition', () => {
     expect(STAGES[0].transitionCondition).toBeTruthy();
     expect(STAGES[1].transitionCondition).toBeTruthy();
-    expect(STAGES[2].transitionCondition).toBeNull();
+    expect(STAGES[2].transitionCondition).toBeTruthy();
+    expect(STAGES[3].transitionCondition).toBeNull();
+  });
+
+  it('every group has a flow diagram with at least one role node', () => {
+    for (const s of STAGES) {
+      for (const g of s.groups) {
+        expect(g.flow, `${g.key} flow`).toBeDefined();
+        expect(g.flow!.some((n) => n.role), `${g.key} has a role node`).toBe(true);
+      }
+    }
   });
 
   it('every deliverable has a unique key', () => {

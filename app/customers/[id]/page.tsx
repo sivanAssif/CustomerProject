@@ -3,26 +3,20 @@ import { notFound } from 'next/navigation';
 import { getStore } from '@/lib/store';
 import {
   STAGES,
+  ROLE_LABELS,
+  ROLES_LEGEND,
+  OVERVIEW_GOAL,
+  COMPLETION_NOTE,
   findDeliverable,
   type Deliverable,
 } from '@/lib/process-definition';
 import { evaluateStageGate, isStageUnlocked } from '@/lib/gating';
 import type { CustomerDeliverable } from '@/lib/types';
 import { advanceStageAction } from '@/app/actions';
-import { RoleChips } from '@/components/RoleChip';
+import { RoleChip, ROLE_VAR } from '@/components/RoleChip';
+import { Flow } from '@/components/Flow';
 
 export const dynamic = 'force-dynamic';
-
-const STATUS_LABELS: Record<string, string> = {
-  todo: 'טרם החל',
-  in_progress: 'בתהליך',
-  done: 'הושלם',
-};
-const TYPE_LABELS: Record<string, string> = {
-  template: 'תוצר',
-  action: 'משימה',
-  meeting: 'פגישה',
-};
 
 function DeliverableRow({
   def,
@@ -39,47 +33,51 @@ function DeliverableRow({
   const deps = (def.dependsOn ?? [])
     .map((k) => findDeliverable(k)?.title)
     .filter(Boolean);
+  const check = status === 'done' ? '✓' : status === 'in_progress' ? '◐' : '';
 
   return (
-    <div
-      className={`card ${status === 'done' ? 'accent' : ''}`}
-      style={{ padding: '16px 18px', opacity: locked ? 0.6 : 1 }}
-    >
-      <div className="row" style={{ justifyContent: 'space-between' }}>
-        <div style={{ flex: '1 1 auto', minWidth: 0 }}>
-          <div className="row" style={{ gap: 8 }}>
-            <strong style={{ fontSize: 16 }}>{def.title}</strong>
-            <span className="badge type small">{TYPE_LABELS[def.type]}</span>
-            <span className={`badge ${status}`}>{STATUS_LABELS[status]}</span>
-          </div>
-          <div className="muted small" style={{ marginTop: 5 }}>
-            {def.taskDescription}
-          </div>
-          <div className="row small" style={{ marginTop: 10, gap: 12 }}>
-            <RoleChips roles={def.assigneeRoles} />
-            {instance?.dueDate && (
-              <span className="badge tozar">📅 יעד: {instance.dueDate}</span>
-            )}
-            {def.type === 'meeting' && instance?.meetingDate && (
-              <span className="badge tozar">🗓️ פגישה: {instance.meetingDate}</span>
-            )}
-            {deps.length > 0 && (
-              <span className="muted small">↳ תלוי ב: {deps.join(', ')}</span>
-            )}
-          </div>
-        </div>
-        <div style={{ flex: 'none' }}>
-          {locked ? (
-            <span className="muted small">🔒 נעול</span>
-          ) : (
-            <Link
-              href={`/customers/${customerId}/deliverables/${def.key}`}
-              className="btn secondary"
-            >
-              {def.type === 'template' ? 'הגשת תוצר' : 'עדכון'}
-            </Link>
+    <div className="deliv">
+      <span className={`check ${status}`}>{check}</span>
+      <div className="body">
+        <div className="desc">{def.taskDescription}</div>
+        {def.subItems && (
+          <ul className="subitems">
+            {def.subItems.map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
+        )}
+        <div className="meta">
+          <span className="resp">
+            <span
+              className="dot"
+              style={{ background: ROLE_VAR[def.assigneeRoles[0]] }}
+            />
+            אחריות: <strong>{def.responsibilityLabel}</strong>
+          </span>
+          <span className="tozar-pill">◎ תוצר: {def.title}</span>
+          {instance?.dueDate && (
+            <span className="resp">📅 יעד: {instance.dueDate}</span>
+          )}
+          {def.type === 'meeting' && instance?.meetingDate && (
+            <span className="resp">🗓️ פגישה: {instance.meetingDate}</span>
+          )}
+          {deps.length > 0 && (
+            <span className="resp">↳ תלוי ב: {deps.join(', ')}</span>
           )}
         </div>
+      </div>
+      <div className="actions">
+        {locked ? (
+          <span className="muted small">🔒</span>
+        ) : (
+          <Link
+            href={`/customers/${customerId}/deliverables/${def.key}`}
+            className="btn secondary"
+          >
+            {def.type === 'template' ? 'הגשת תוצר' : 'עדכון'}
+          </Link>
+        )}
       </div>
     </div>
   );
@@ -102,6 +100,7 @@ export default async function CustomerPage({
         ← חזרה לכל הלקוחות
       </Link>
 
+      {/* Hero */}
       <div className="hero" style={{ marginTop: 10 }}>
         <div className="eyebrow">לקוח · נוהל קליטת לקוח חדש</div>
         <h1>{customer.name}</h1>
@@ -122,6 +121,24 @@ export default async function CustomerPage({
         </div>
       </div>
 
+      {/* המטרה */}
+      <div className="intro-card">
+        <span className="icon">🎯</span>
+        <div>
+          <h2>המטרה</h2>
+          <div>{OVERVIEW_GOAL}</div>
+        </div>
+      </div>
+
+      {/* בעלי התפקידים */}
+      <div className="legend">
+        <span className="legend-title">בעלי התפקידים</span>
+        {ROLES_LEGEND.map((r) => (
+          <RoleChip key={r} role={r} />
+        ))}
+      </div>
+
+      {/* שלבים */}
       {STAGES.map((stage) => {
         const unlocked = isStageUnlocked(stage.number, customer.currentStage);
         const stageDeliverables = stage.groups.flatMap((g) => g.deliverables);
@@ -139,6 +156,10 @@ export default async function CustomerPage({
         return (
           <section key={stage.key} style={{ marginTop: 34 }}>
             <div className="stage-head">
+              <div style={{ flex: '1 1 auto' }}>
+                <h2>{stage.heading}</h2>
+                <div className="muted small">{stage.subtitle}</div>
+              </div>
               <span
                 className={`stage-num ${
                   isCurrent ? 'current' : unlocked ? 'other' : 'locked'
@@ -146,13 +167,9 @@ export default async function CustomerPage({
               >
                 {stage.number}
               </span>
-              <div>
-                <h2>{stage.title}</h2>
-                <div className="muted small">{stage.subtitle}</div>
-              </div>
             </div>
 
-            <div className="row" style={{ margin: '10px 0 4px', gap: 10 }}>
+            <div className="row" style={{ margin: '10px 0 16px', gap: 10 }}>
               <span className="small muted" style={{ flex: 'none' }}>
                 הושלמו {gate.completedCount}/{gate.totalCount}
               </span>
@@ -165,26 +182,29 @@ export default async function CustomerPage({
             </div>
 
             {stage.groups.map((group) => (
-              <div key={group.key} style={{ marginBottom: 14 }}>
-                <div className="group-title">{group.title}</div>
-                <div className="grid">
-                  {group.deliverables.map((def) => (
-                    <DeliverableRow
-                      key={def.key}
-                      def={def}
-                      instance={byKey.get(def.key)}
-                      customerId={customer.id}
-                      locked={!unlocked}
-                    />
-                  ))}
+              <div key={group.key} className="group-card">
+                <div className="gc-head">
+                  <span className="gc-icon">◎</span>
+                  <h3>{group.title}</h3>
                 </div>
+                {group.deliverables.map((def) => (
+                  <DeliverableRow
+                    key={def.key}
+                    def={def}
+                    instance={byKey.get(def.key)}
+                    customerId={customer.id}
+                    locked={!unlocked}
+                  />
+                ))}
+                {group.flow && <Flow nodes={group.flow} />}
               </div>
             ))}
 
-            {stage.transitionCondition && (
+            {stage.transitionCondition ? (
               <div className="card accent-amber" style={{ marginTop: 10 }}>
                 <div className="small">
-                  <strong>תנאי מעבר לשלב הבא:</strong> {stage.transitionCondition}
+                  <strong>תנאי מעבר: </strong>
+                  {stage.transitionCondition}
                 </div>
                 {isCurrent ? (
                   <form
@@ -192,7 +212,7 @@ export default async function CustomerPage({
                     style={{ marginTop: 12 }}
                   >
                     <button className="btn" type="submit" disabled={!gate.canAdvance}>
-                      מעבר לשלב {stage.number + 1} →
+                      {stage.transitionLabel} →
                     </button>
                     {!gate.canAdvance && (
                       <div className="notice warn" style={{ marginTop: 10 }}>
@@ -208,6 +228,24 @@ export default async function CustomerPage({
                   )
                 )}
               </div>
+            ) : (
+              isCurrent && (
+                <div className="card accent" style={{ marginTop: 10 }}>
+                  <div className="small">
+                    <strong>{COMPLETION_NOTE}</strong>
+                  </div>
+                  {gate.canAdvance === false && gate.missingTitles.length > 0 && (
+                    <div className="notice warn" style={{ marginTop: 10 }}>
+                      להשלמת הפרויקט חסר: {gate.missingTitles.join(', ')}
+                    </div>
+                  )}
+                  {gate.missingTitles.length === 0 && (
+                    <div className="notice ok" style={{ marginTop: 10 }}>
+                      ✓ הנוהל הושלם במלואו
+                    </div>
+                  )}
+                </div>
+              )
             )}
           </section>
         );

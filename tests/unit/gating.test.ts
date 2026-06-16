@@ -51,9 +51,15 @@ describe('evaluateStageGate', () => {
   });
 
   it('never allows advancing from the last stage even if all done', () => {
-    const res = evaluateStageGate(3, makeDeliverables(3, 'done'));
+    const res = evaluateStageGate(4, makeDeliverables(4, 'done'));
     expect(res.isLastStage).toBe(true);
     expect(res.canAdvance).toBe(false);
+  });
+
+  it('allows advancing from stage 3 (no longer the last stage)', () => {
+    const res = evaluateStageGate(3, makeDeliverables(3, 'done'));
+    expect(res.isLastStage).toBe(false);
+    expect(res.canAdvance).toBe(true);
   });
 
   it('returns safe defaults for unknown stage', () => {
@@ -83,7 +89,8 @@ describe('nextStageNumber', () => {
   it('returns the next stage or null at the end', () => {
     expect(nextStageNumber(1)).toBe(2);
     expect(nextStageNumber(2)).toBe(3);
-    expect(nextStageNumber(3)).toBeNull();
+    expect(nextStageNumber(3)).toBe(4);
+    expect(nextStageNumber(4)).toBeNull();
     expect(nextStageNumber(99)).toBeNull();
   });
 });

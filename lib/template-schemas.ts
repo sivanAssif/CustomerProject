@@ -86,6 +86,18 @@ export const DOC_SCHEMAS: Record<string, DocSchema> = {
       { key: 'results', label: 'תוצאות', placeholder: 'סיכום תוצאות הבדיקות בסביבת הלקוח' },
     ],
   },
+  gantt: {
+    sections: [
+      { key: 'gantt', label: 'קישור לגאנט / לוח זמנים', placeholder: 'קישור או תיאור לוחות הזמנים' },
+      { key: 'milestones', label: 'אבני דרך מרכזיות', placeholder: 'פיתוחים, הזנת נתונים, הדרכות, עלייה לאוויר...' },
+    ],
+  },
+  'uat-report': {
+    sections: [
+      { key: 'scope', label: 'תהליכים שנבדקו ב-UAT', placeholder: 'אילו תהליכים קריטיים נבדקו?' },
+      { key: 'result', label: 'תוצאה', placeholder: 'סיכום תוצאות ה-UAT' },
+    ],
+  },
 };
 
 /** סכמת טבלה לכל תוצר table */
@@ -137,6 +149,12 @@ export const LIST_SCHEMAS: Record<string, ListSchema> = {
     itemFields: [
       { key: 'title', label: 'נקודה לשיפור' },
       { key: 'area', label: 'תחום', kind: 'select', options: ['תיאום', 'בדיקות', 'תיעוד', 'לוחות זמנים', 'אחר'] },
+    ],
+  },
+  'bug-list': {
+    itemFields: [
+      { key: 'bug', label: 'תיאור הבאג' },
+      { key: 'decision', label: 'החלטה', kind: 'select', options: ['חוסם עלייה', 'ניתן לטיפול לאחר'] },
     ],
   },
 };

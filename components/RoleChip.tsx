@@ -1,10 +1,10 @@
-import { ROLE_LABELS, type Role } from '@/lib/process-definition';
+import { ROLE_LABELS, ROLE_ABBR, type Role } from '@/lib/process-definition';
 
-const ROLE_ABBR: Record<Role, string> = {
-  pm: 'PM',
-  product: 'PR',
-  dev: 'DV',
-  qa: 'QA',
+export const ROLE_VAR: Record<Role, string> = {
+  pm: 'var(--role-pm)',
+  product: 'var(--role-product)',
+  dev: 'var(--role-dev)',
+  qa: 'var(--role-qa)',
 };
 
 const ROLE_CLASS: Record<Role, string> = {

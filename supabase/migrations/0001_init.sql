@@ -22,7 +22,7 @@ create table customers (
   project_type text,
   start_date date,
   status customer_status not null default 'active',
-  current_stage int not null default 1 check (current_stage between 1 and 3),
+  current_stage int not null default 1 check (current_stage between 1 and 4),
   created_by uuid references app_users (id),
   created_at timestamptz not null default now()
 );

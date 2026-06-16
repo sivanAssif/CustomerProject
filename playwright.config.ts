@@ -15,7 +15,12 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev',
     url: 'http://localhost:3000',
-    reuseExistingServer: true,
+    // בדיקות E2E רצות מול הסטור המקומי (קובץ), לא מול Supabase הענן.
+    reuseExistingServer: false,
+    env: {
+      NEXT_PUBLIC_SUPABASE_URL: '',
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: '',
+    },
     timeout: 120000,
   },
 });

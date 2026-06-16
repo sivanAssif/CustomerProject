@@ -423,6 +423,236 @@ h3 {
   border-radius: 999px;
 }
 
+/* ── Intro (המטרה) ────────────────────── */
+.intro-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-inline-start: 6px solid var(--warn);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px 24px;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.intro-card .icon {
+  flex: none;
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--warn-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+.intro-card h2 {
+  color: var(--warn);
+  font-size: 18px;
+  margin: 0 0 4px;
+}
+
+/* ── Legend (בעלי התפקידים) ───────────── */
+.legend {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px 22px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+.legend .legend-title {
+  font-weight: 800;
+  font-size: 15px;
+}
+
+/* ── Group card ───────────────────────── */
+.group-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 22px 24px;
+  margin-bottom: 16px;
+}
+.group-card > .gc-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.group-card .gc-icon {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  background: var(--ink);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+.group-card .gc-head h3 {
+  margin: 0;
+  font-size: 19px;
+}
+
+/* ── Deliverable row ──────────────────── */
+.deliv {
+  display: flex;
+  gap: 14px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.deliv:first-of-type {
+  border-top: none;
+}
+.deliv .check {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  border: 2px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: transparent;
+  margin-top: 2px;
+}
+.deliv .check.done {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+.deliv .check.in_progress {
+  border-color: var(--warn);
+  color: var(--warn);
+}
+.deliv .body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.deliv .title {
+  font-weight: 700;
+  font-size: 15.5px;
+}
+.deliv .desc {
+  color: var(--ink);
+  font-size: 14.5px;
+}
+.deliv .subitems {
+  margin: 8px 0 0;
+  padding-inline-start: 18px;
+  color: var(--ink-soft);
+  font-size: 13.5px;
+}
+.deliv .subitems li {
+  margin: 2px 0;
+}
+.deliv .meta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 10px;
+}
+.resp {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+.resp .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 999px;
+  display: inline-block;
+}
+.tozar-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--amber-soft);
+  color: var(--amber);
+  border: 1px solid #f0dcae;
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.deliv .actions {
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: flex-end;
+}
+
+/* ── Flow diagram ─────────────────────── */
+.flow {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--line);
+}
+.flow-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+  text-align: center;
+  min-width: 70px;
+}
+.flow-node .cap {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+.flow-node .who {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 700;
+}
+.flow-conn {
+  align-self: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: var(--ink-soft);
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 0 2px;
+}
+.flow-conn .arrow {
+  font-size: 18px;
+  line-height: 1;
+  color: var(--accent);
+}
+.flow-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+}
+
 table.tmpl {
   width: 100%;
   border-collapse: separate;
