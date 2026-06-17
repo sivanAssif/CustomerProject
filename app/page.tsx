@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { getStore } from '@/lib/store';
-import { createCustomerAction } from './actions';
 import { STAGES } from '@/lib/process-definition';
+import NewCustomerButton from '@/components/NewCustomerButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,6 +13,12 @@ const STATUS_LABELS: Record<string, string> = {
 
 export default async function DashboardPage() {
   const customers = await getStore().listCustomers();
+  const lastStage = STAGES[STAGES.length - 1].number;
+  const total = customers.length;
+  const completed = customers.filter(
+    (c) => c.currentStage >= lastStage || c.status === 'completed'
+  ).length;
+  const active = customers.filter((c) => c.status === 'active').length;
 
   return (
     <main className="container">
@@ -25,64 +31,70 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div className="card accent" style={{ margin: '0 0 24px' }}>
-        <h2 style={{ fontSize: 18 }}>לקוח חדש</h2>
-        <form action={createCustomerAction}>
-          <div className="row" style={{ alignItems: 'flex-end' }}>
-            <div className="field" style={{ flex: '1 1 240px', marginBottom: 0 }}>
-              <label htmlFor="name">שם לקוח *</label>
-              <input id="name" name="name" className="input" required />
-            </div>
-            <div className="field" style={{ flex: '1 1 200px', marginBottom: 0 }}>
-              <label htmlFor="projectType">סוג פרויקט</label>
-              <input
-                id="projectType"
-                name="projectType"
-                className="input"
-                placeholder="הטמעה / אינטגרציה / ..."
-              />
-            </div>
-            <div className="field" style={{ flex: '0 1 160px', marginBottom: 0 }}>
-              <label htmlFor="startDate">תאריך התחלה</label>
-              <input
-                id="startDate"
-                name="startDate"
-                type="date"
-                className="input"
-              />
-            </div>
-            <button className="btn" type="submit">
-              + צור לקוח
-            </button>
-          </div>
-        </form>
+      {/* סטטיסטיקות */}
+      <div className="stats">
+        <div className="stat">
+          <div className="stat-num">{total}</div>
+          <div className="stat-label">לקוחות בתהליך</div>
+        </div>
+        <div className="stat">
+          <div className="stat-num">{active}</div>
+          <div className="stat-label">פעילים</div>
+        </div>
+        <div className="stat">
+          <div className="stat-num">{completed}</div>
+          <div className="stat-label">הושלמו</div>
+        </div>
+        <div className="stat">
+          <div className="stat-num">{STAGES.length}</div>
+          <div className="stat-label">שלבים בנוהל</div>
+        </div>
+      </div>
+
+      {/* כותרת רשימה + כפתור */}
+      <div
+        className="row"
+        style={{ justifyContent: 'space-between', margin: '8px 0 16px' }}
+      >
+        <h2 style={{ margin: 0, fontSize: 22 }}>הלקוחות שלי</h2>
+        <NewCustomerButton />
       </div>
 
       {customers.length === 0 ? (
-        <div className="card muted">אין עדיין לקוחות. צרו לקוח חדש כדי להתחיל.</div>
+        <div className="empty-state">
+          <div style={{ fontSize: 40, marginBottom: 8 }}>📋</div>
+          <h3 style={{ margin: '0 0 6px' }}>אין עדיין לקוחות</h3>
+          <p className="muted" style={{ margin: '0 0 16px' }}>
+            צרו לקוח חדש כדי להתחיל לעקוב אחרי נוהל הקליטה.
+          </p>
+          <NewCustomerButton />
+        </div>
       ) : (
         <div className="grid">
           {customers.map((c) => {
             const stage = STAGES.find((s) => s.number === c.currentStage);
+            const pct = Math.round((c.currentStage / STAGES.length) * 100);
             return (
               <Link
                 key={c.id}
                 href={`/customers/${c.id}`}
-                className="card"
-                style={{ display: 'block', color: 'inherit' }}
+                className="card customer-card"
               >
                 <div className="row" style={{ justifyContent: 'space-between' }}>
                   <div>
-                    <strong style={{ fontSize: 17 }}>{c.name}</strong>
+                    <strong style={{ fontSize: 18 }}>{c.name}</strong>
                     {c.projectType && (
                       <span className="muted small"> · {c.projectType}</span>
                     )}
                   </div>
                   <span className="badge type">
-                    שלב {c.currentStage}: {stage?.title}
+                    שלב {c.currentStage}/{STAGES.length}: {stage?.title}
                   </span>
                 </div>
-                <div className="muted small" style={{ marginTop: 6 }}>
+                <div className="progress" style={{ margin: '12px 0 8px' }}>
+                  <span style={{ width: `${pct}%` }} />
+                </div>
+                <div className="muted small">
                   סטטוס: {STATUS_LABELS[c.status]}
                   {c.startDate ? ` · התחלה: ${c.startDate}` : ''}
                 </div>

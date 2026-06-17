@@ -1,13 +1,17 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, type Page } from '@playwright/test';
+
+// פותח את המודאל, ממלא שם ויוצר לקוח
+async function createCustomer(page: Page, name: string) {
+  await page.goto('/');
+  await page.getByRole('button', { name: '+ לקוח חדש' }).first().click();
+  await page.getByLabel('שם לקוח *').fill(name);
+  await page.getByRole('button', { name: 'צור לקוח', exact: true }).click();
+}
 
 // בדיקת זרימה מלאה: יצירת לקוח → מילוי תוצר → גייטינג → מעבר שלב.
 test('full onboarding flow with stage gating', async ({ page }) => {
   const name = `לקוח בדיקה ${Date.now()}`;
-
-  // יצירת לקוח חדש
-  await page.goto('/');
-  await page.getByLabel('שם לקוח *').fill(name);
-  await page.getByRole('button', { name: '+ צור לקוח' }).click();
+  await createCustomer(page, name);
 
   // הגענו לעמוד הלקוח, כל 4 השלבים גלויים (כותרות הגוף)
   await expect(page.getByRole('heading', { name, level: 1 })).toBeVisible();
@@ -34,9 +38,7 @@ test('full onboarding flow with stage gating', async ({ page }) => {
 
 test('purpose box and template appear on deliverable page', async ({ page }) => {
   const name = `לקוח תוצר ${Date.now()}`;
-  await page.goto('/');
-  await page.getByLabel('שם לקוח *').fill(name);
-  await page.getByRole('button', { name: '+ צור לקוח' }).click();
+  await createCustomer(page, name);
 
   // פתיחת התוצר הראשון — מסמך מטרות
   await page
